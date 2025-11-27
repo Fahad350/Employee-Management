@@ -11,18 +11,23 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
 
-    const response = await axiosSetup.post("/login", {
-      email: employeId,
-      password,
-    });
-    localStorage.setItem("token", response.data.token);
-    toast.success("Login Successful!");
-    setTimeout(() => {
-      navigate("/");
-    }, 1200);
-    console.log("Employes Details", `${(employeId, password)}`);
+      const response = await axiosSetup.post("/login", {
+        email: employeId,
+        password,
+      });
+      localStorage.setItem("token", response.data.token);
+      toast.success("Login Successful!");
+      setTimeout(() => {
+        navigate("/");
+      }, 1200);
+      console.log("Employes Details", `${(employeId, password)}`);
+    } catch (error) {
+      toast.error("Invalid Credentials!");
+      error;
+    }
   };
 
   const handleGoogleLogin = () => alert("Redirecting to Google Auth...");

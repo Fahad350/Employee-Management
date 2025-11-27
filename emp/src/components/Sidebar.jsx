@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaUser, FaClock, FaBoxOpen, FaHistory, FaHome } from "react-icons/fa";
 import { IoIosLogOut } from "react-icons/io";
+import { FaBars } from "react-icons/fa";
 
 const NAV_ITEMS = [
   { to: "/dashboard", label: "Dashboard", icon: FaHome },
@@ -35,29 +36,46 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
   return (
     <>
+      {/* Toggle Button (Mobile Only) */}
+      <button
+        onClick={() => setSidebarOpen(true)}
+        className="md:hidden fixed top-3 left-3 z-40 text-white bg-gray-700 p-2 rounded"
+      >
+        <FaBars size={20} />
+      </button>
+
       <aside
-        className={`
-          fixed md:static z-30 inset-y-0 left-0 w-60 bg-gray-800 text-gray-200 
-          border-r border-gray-700 shadow-sm transform transition-transform duration-300 ease-in-out
-          ${
-            sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } md:translate-x-0
+        className={`fixed md:static z-30 inset-y-0 left-0 
+          bg-gray-800 text-gray-200 border-r border-gray-700 shadow-sm 
+          transition-transform duration-300 ease-in-out
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} 
+          md:translate-x-0 
+          w-16 md:w-60
         `}
       >
-        <div className="p-4 font-bold text-lg bg-gray-800 text-white border-b">
-          Employee Portal
+        {/* Sidebar Header */}
+        <div className="p-4 bg-gray-800 text-white border-b text-center md:text-left">
+          <span className="hidden md:block font-bold text-lg">
+            Employee Portal
+          </span>
+
+          {/* Icon-only title for small screens */}
+          <span className="md:hidden font-bold text-xl">EP</span>
         </div>
 
+        {/* Nav Items */}
         <nav className="mt-3 flex flex-col gap-1">
           {NAV_ITEMS.map(({ to, label, icon: Icon }) =>
             label === "Logout" ? (
               <button
                 key={to}
                 onClick={handleLogout}
-                className="flex items-center gap-3 px-4 py-2 cursor-pointer rounded-lg text-sm font-medium text-gray-200 hover:bg-gray-600 transition"
+                className="flex items-center md:gap-3 justify-center md:justify-start 
+                  px-4 py-2 cursor-pointer rounded-lg text-sm font-medium 
+                  text-gray-200 hover:bg-gray-600 transition"
               >
-                {Icon && <Icon className="h-4 w-4" />}
-                {label}
+                <Icon className="h-5 w-5" />
+                <span className="hidden md:inline">{label}</span>
               </button>
             ) : (
               <NavLink
@@ -65,7 +83,8 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 to={to}
                 onClick={() => setSidebarOpen(false)}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium transition
+                  `flex items-center md:gap-3 justify-center md:justify-start 
+                  px-4 py-2 rounded-lg text-sm font-medium transition
                   ${
                     isActive
                       ? "bg-indigo-50 text-indigo-700"
@@ -73,15 +92,15 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
                   }`
                 }
               >
-                {Icon && <Icon className="h-4 w-4" />}
-                {label}
+                <Icon className="h-5 w-5" />
+                <span className="hidden md:inline">{label}</span>
               </NavLink>
             )
           )}
         </nav>
       </aside>
 
-      {/* Overlay for mobile */}
+      {/* Mobile Overlay */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black opacity-50 z-20 md:hidden"
